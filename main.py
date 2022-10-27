@@ -1,4 +1,4 @@
-import math
+
 from tkinter import *
 
 from ElectricityCluster import *
@@ -74,14 +74,6 @@ class PaintApp:
             centerY = min(self.y1_line_pt, self.y2_line_pt)+diameter/2
             NewElec = Electricity(x=centerX, y=centerY, clockwise=1)
             self.Cluster.add_electricity(NewElec)
-            event.widget.create_oval(self.x1_line_pt, self.y1_line_pt, self.x1_line_pt + diameter,
-                                     self.y1_line_pt + diameter, fill="red", outline="black", width=1)
-            event.widget.create_line(self.x1_line_pt + diameter / 2, self.y1_line_pt + diameter / 4,
-                                     self.x1_line_pt + diameter / 2, self.y1_line_pt + diameter * 3 / 4, fill="black",
-                                     width=4)
-            event.widget.create_line(self.x1_line_pt + diameter / 4, self.y1_line_pt + diameter / 2,
-                                     self.x1_line_pt + diameter * 3 / 4, self.y1_line_pt + diameter / 2, fill="black",
-                                     width=4)
             self.build_Vector_field(event)
 
     def outside_draw(self, event=None):
@@ -91,11 +83,6 @@ class PaintApp:
             centerY = min(self.y1_line_pt, self.y2_line_pt) + diameter / 2
             NewElec = Electricity(x=centerX, y=centerY, clockwise=0)
             self.Cluster.add_electricity(NewElec)
-            event.widget.create_oval(self.x1_line_pt, self.y1_line_pt, self.x1_line_pt + diameter,
-                                     self.y1_line_pt + diameter, fill="blue", outline="black", width=1)
-            event.widget.create_oval(self.x1_line_pt + diameter / 4, self.y1_line_pt + diameter / 4,
-                                     self.x1_line_pt + diameter * 3 / 4, self.y1_line_pt + diameter * 3 / 4,
-                                     fill="black", width=1)
             self.build_Vector_field(event)
 
     def build_Vector_field(self, event):
