@@ -14,19 +14,21 @@ class MagnetiсVector:
         self.angle = angle
 
     def draw(self, event):
-        event.widget.create_line(self.x, self.y, self.x + self.length * math.cos(self.angle),
-                                 self.y + self.length * math.sin(self.angle), fill="black")
-        event.widget.create_line(self.x + self.length * math.cos(self.angle),
-                                 self.y + self.length * math.sin(self.angle),
-                                 self.x + self.length * math.cos(self.angle) + self.length / 3 * math.cos(
-                                     self.angle + math.pi + math.pi / 6),
-                                 self.y + self.length * math.sin(self.angle) + self.length * math.sin(
+        endx = self.x + self.length * math.cos(self.angle)
+        endy = self.y + self.length * math.sin(self.angle)
+        event.widget.create_line(self.x, self.y, endx,
+                                 endy, fill="black")
+        event.widget.create_line(endx,
+                                 endy,
+                                 endx + self.length / 3 * math.cos(
+                                     self.angle + math.pi + math.pi / 4),
+                                 endy + self.length * math.sin(
                                      self.angle + math.pi + math.pi / 4), fill="black")
-        event.widget.create_line(self.x + self.length * math.cos(self.angle),
-                                 self.y + self.length * math.sin(self.angle),
-                                 self.x + self.length * math.cos(self.angle) + self.length / 3 * math.cos(
-                                     self.angle + math.pi - math.pi / 6),
-                                 self.y + self.length * math.sin(self.angle) + self.length * math.sin(
+        event.widget.create_line(endx,
+                                 endy,
+                                 endx + self.length / 3 * math.cos(
+                                     self.angle + math.pi - math.pi / 4),
+                                 endy + self.length * math.sin(
                                      self.angle + math.pi - math.pi / 4), fill="black")
 
     def erase(self, event):
