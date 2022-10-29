@@ -10,7 +10,10 @@ class Electricity:
     def get_vector_angle(self, vector_x, vector_y):
         x = vector_x - self.x
         y = vector_y - self.y
-        angle = math.atan(y / x)
+        try:
+            angle = math.atan(y / x)
+        except:
+            angle = 0
         if x <= 0:
             angle += math.pi
         if self.clockwise:
@@ -32,7 +35,7 @@ class Electricity:
         x = self.x - vector_x
         y = self.y - vector_y
         num = x * x + y * y
-        length = 1250000 / num
+        length = 100000 / num
 
         if length > 625.0 or num <= 400.0:
             return 0

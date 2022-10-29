@@ -106,33 +106,31 @@ class PaintApp:
                                          x + 7.5, y,
                                          fill="black",
                                          width=4)
+
         for vector in self.VecFil.get_VectorField():
             x = vector.get_X()
             y = vector.get_Y()
             length = 0
             angle = 0
             len2 = 0
-
+            flag = 1
             for elect in self.Cluster.get_cluster():
                 temp_len = elect.get_vector_length(vector_x=x, vector_y=y)
 
                 temp_angle = elect.get_vector_angle(vector_x=x, vector_y=y)
 
-                if angle == 0:
+                if flag == 1:
                     length = temp_len
                     angle = temp_angle
                     len2 = length
+                    flag = 0
                 else:
                     num = math.pi - angle + temp_angle
                     cos = math.cos(num)
                     sin = math.sin(num)
                     len2 = temp_len * temp_len + length * length - 2 * temp_len * length * cos
-                    if length == 0 or len2 == 0:
-                        angle = 0
-                        len2 = 0
-                    else:
-                        len2 = math.sqrt(len2)
-                        angle = math.asin(sin * temp_len / len2) + temp_angle
+                    len2 = math.sqrt(len2)
+                    angle = math.asin(sin * temp_len / len2) + temp_angle
 
             vector.set_length(len2)
             vector.set_angle(angle)
