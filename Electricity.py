@@ -1,23 +1,22 @@
 import math
 
+
 class Electricity:
-    x = 0
-    y = 0
-    clockwise = 0
     def __init__(self, x, y, clockwise):
         self.x = x
         self.y = y
         self.clockwise = clockwise
 
     def get_vector_angle(self, vector_x, vector_y):
-        if self.clockwise==1:
-            angle = math.atan((vector_y - self.y) / (vector_x - self.x)) + math.pi / 2
-            if (vector_x - self.x<=0):
-                angle = angle + math.pi
+        x = vector_x - self.x
+        y = vector_y - self.y
+        angle = math.atan(y / x)
+        if x <= 0:
+            angle += math.pi
+        if self.clockwise:
+            angle += math.pi / 2
             return angle
-        angle = math.atan((vector_y - self.y) / (vector_x - self.x)) - math.pi / 2
-        if (vector_x - self.x <= 0):
-            angle = angle + math.pi
+        angle -= math.pi / 2
         return angle
 
     def get_clockwise(self):
@@ -30,8 +29,11 @@ class Electricity:
         return self.y
 
     def get_vector_length(self, vector_x, vector_y):
-        len = 500/math.sqrt(((self.x-vector_x)*(self.x-vector_x)+(self.y-vector_y)*(self.y-vector_y))/5)
-        if len > 25 or math.sqrt(((self.x-vector_x)*(self.x-vector_x)+(self.y-vector_y)*(self.y-vector_y)))<=20:
-            len = 0
-        return len
+        x = self.x - vector_x
+        y = self.y - vector_y
+        num = x * x + y * y
+        length = 1250000 / num
 
+        if length > 625.0 or num <= 400.0:
+            return 0
+        return math.sqrt(length)
