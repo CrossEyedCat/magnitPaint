@@ -1,5 +1,5 @@
 from tkinter import *
-
+import tkinter.filedialog as fd
 from ElectricityCluster import *
 from Electricity import *
 from VectorField import *
@@ -27,22 +27,49 @@ class PaintApp:
         self.drawing_area.bind("<ButtonRelease-1>", self.left_button_up)
 
         the_menu = Menu(Root)
-
         file_menu = Menu(the_menu, tearoff=0)
-        file_menu.add_command(label="Inside", command=self.set_inside_drawing_tool)
-        file_menu.add_command(label="Outside", command=self.set_outside_drawing_tool)
-
-        file_menu.add_separator()
+        tool_menu = Menu(the_menu, tearoff=0)
+        elect_menu = Menu(the_menu, tearoff=0)
+        elect_menu.add_command(label="Inside", command=self.set_inside_drawing_tool)
+        elect_menu.add_command(label="Outside", command=self.set_outside_drawing_tool)
+        tool_menu.add_command(label="Remove", command=self.remove_drawing_tool)
+        tool_menu.add_command(label="Move", command=self.move_drawing_tool)
+        file_menu.add_command(label="Save", command=self.save)
+        file_menu.add_command(label="load", command=self.load)
         file_menu.add_command(label="Quit", command=self.quit_app)
-
         the_menu.add_cascade(label="Options", menu=file_menu)
+        the_menu.add_cascade(label="Tools", menu=tool_menu)
+        the_menu.add_cascade(label="Electricity", menu=elect_menu)
         Root.config(menu=the_menu)
+
+    def save(self):
+        self.text = Text(self, height=10, width=50)
+        self.btn_save = Button(self, text="Сохранить", command=self.save_file)
+
+        self.text.pack()
+        self.btn_save.pack(pady=10, ipadx=5)
+
+    def save_file(self):
+        new_file = fd.asksaveasfile(title="Сохранить файл", defaultextension=".txt",
+                                    filetypes=(("Текстовый файл", "*.txt"),))
+        if new_file:
+            new_file.write(self.Cluster.get_JSON())
+            new_file.close()
+
+    def load(self):
+        btn_file = self.tk.Button(self, text="Выбрать файл", command=self.choose_file)
 
     def set_inside_drawing_tool(self):
         self.drawing_tool = "inside"
 
     def set_outside_drawing_tool(self):
         self.drawing_tool = "outside"
+
+    def remove_drawing_tool(self):
+        self.drawing_tool = "remove"
+
+    def move_drawing_tool(self):
+        self.drawing_tool = "move"
 
     def left_button_down(self, event=None):
         self.left_button = "down"
@@ -61,6 +88,10 @@ class PaintApp:
             self.inside_draw(event)
         if self.drawing_tool == "outside":
             self.outside_draw(event)
+        if self.drawing_tool == "remove":
+            self.remove_draw(event)
+        if self.drawing_tool == "move":
+            self.move_draw(event)
 
     def motion(self, event=None):
         self.x_position = event.x
@@ -83,6 +114,19 @@ class PaintApp:
             new_elect = Electricity(x=center_x, y=center_y, clockwise=0)
             self.Cluster.add_electricity(new_elect)
             self.build_Vector_field(event)
+
+    def remove_draw(self, event=None):
+        for elect in self.Cluster.get_cluster():
+            if (elect.get_x() - self.x2_line_pt) ** 2 + (elect.get_y() - self.y2_line_pt) ** 2 <= 900:
+                self.Cluster.get_cluster().remove(elect)
+                self.build_Vector_field(event)
+
+    def move_draw(self, event=None):
+        for elect in self.Cluster.get_cluster():
+            if (elect.get_x() - self.x1_line_pt) ** 2 + (elect.get_y() - self.y1_line_pt) ** 2 <= 900:
+                elect.set_x(self.x2_line_pt)
+                elect.set_y(self.y2_line_pt)
+                self.build_Vector_field(event)
 
     def build_Vector_field(self, event):
         self.drawing_area.delete("all")

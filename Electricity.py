@@ -28,8 +28,14 @@ class Electricity:
     def get_x(self):
         return self.x
 
+    def set_x(self, x):
+        self.x = x
+
     def get_y(self):
         return self.y
+
+    def set_y(self, y):
+        self.y = y
 
     def get_vector_length(self, vector_x, vector_y):
         x = self.x - vector_x
